@@ -24,9 +24,13 @@ class IndexMinPQ:
         """
         将索引key指向的元素设为item
         """
+        assert key in self
+        oldItem = self._keys[key]
         self._keys[key] = item
-        self._shiftdown(self._qp[key])
-        self._shiftup(self._qp[key])
+        if item < oldItem:
+            self._shiftdown(self._qp[key])
+        else:
+            self._shiftup(self._qp[key])
 
     def _less(self, i, j):
         return self._keys[self._pq[i]] < self._keys[self._pq[j]]
@@ -82,6 +86,7 @@ class IndexMinPQ:
         assert key in self
         index = self._qp[key]
         self._exch(index, self._N)
+        self._pq[self._N] = -1
         self._N -= 1
         self._shiftdown(index)
         self._shiftup(index)
@@ -99,4 +104,4 @@ class IndexMinPQ:
         return self._keys[key]
     
     def __repr__(self):
-        return str([(k,v) for k,v in enumerate(self._keys) if v])
+        return str([(k,v) for k,v in enumerate(self._keys) if v is not None])
